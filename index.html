@@ -120,8 +120,9 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
 
-        [data-b1][data-b2][data-c1] { transition: opacity 0.2s ease; }
-        .level-switching [data-b1][data-b2][data-c1] { opacity: 0.4; }
+        .hero-text-shadow {
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
 
         @media (max-width: 768px) {
             .reveal, .reveal-left, .reveal-right {
@@ -175,27 +176,27 @@
 
     <!-- Hero Section -->
     <header class="pt-20">
-        <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+        <div class="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80');"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-rt-950/92 via-rt-900/88 to-slate-900/85"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-rt-950/95 via-rt-900/92 to-slate-950/90"></div>
 
             <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-                <div class="reveal">
-                    <span class="inline-block py-1 px-4 rounded-full bg-rt-900/60 text-white text-sm font-semibold mb-5 border border-rt-400/50 backdrop-blur-sm">
+                <div class="reveal bg-black/40 backdrop-blur-sm rounded-2xl p-8 md:p-10 border border-white/10 shadow-2xl">
+                    <span class="inline-block py-1 px-4 rounded-full bg-rt-900/70 text-white text-sm font-semibold mb-5 border border-rt-400/50">
                         <span data-b1="Headquarters Essen · Subsidiaries Shanghai & Detroit"
                               data-b2="Head Office Essen · Branches in Shanghai & Detroit"
                               data-c1="Corporate HQ Essen · International Subsidiaries in Shanghai & Detroit">
                             Headquarters Essen · Subsidiaries Shanghai & Detroit
                         </span>
                     </span>
-                    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+                    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight hero-text-shadow">
                         <span data-b1="Precision Engineering for the Automotive Industry"
                               data-b2="Special Machine Engineering for the Global Automotive Supply Chain"
                               data-c1="Precision-Engineered Special Machinery for the Global Automotive Value Chain">
                             Precision Engineering for the Automotive Industry
                         </span>
                     </h1>
-                    <p class="text-base md:text-lg text-white/80 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                    <p class="text-base md:text-lg text-white/90 mb-8 max-w-2xl mx-auto font-light leading-relaxed hero-text-shadow">
                         <span data-b1="We design and build CNC machines, assembly lines, and test stands. Our customers are automotive suppliers all over the world."
                               data-b2="We design and manufacture CNC milling machines, automated assembly lines, and quality assurance test stands. Our clients are tier 1 and tier 2 automotive suppliers worldwide."
                               data-c1="We conceive, engineer, and manufacture CNC milling solutions, automated assembly lines, and quality assurance test platforms for tier 1 and tier 2 automotive suppliers across global markets.">
@@ -206,7 +207,7 @@
                         <a href="#solutions" class="bg-accent-500 hover:bg-accent-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition">
                             <span data-b1="Our Solutions" data-b2="Explore Our Solutions" data-c1="Discover Our Engineering Solutions">Our Solutions</span>
                         </a>
-                        <a href="#about" class="bg-transparent border-2 border-white/30 text-white font-bold py-3 px-6 rounded-xl hover:bg-white/10 transition">
+                        <a href="#about" class="bg-white/10 hover:bg-white/20 border-2 border-white/40 text-white font-bold py-3 px-6 rounded-xl transition backdrop-blur-sm">
                             <span data-b1="About Our Company" data-b2="About Our Company" data-c1="About Our Organisation">About Our Company</span>
                         </a>
                     </div>
@@ -1208,16 +1209,6 @@
         </div>
     </div>
 
-    <!-- Language Level Switcher (B1 / B2 / C1) -->
-    <div class="fixed bottom-8 left-8 z-50 flex flex-col gap-1">
-        <div class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-slate-200 p-1.5 flex gap-1">
-            <button onclick="setLevel('b1')" id="btn-b1" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">B1</button>
-            <button onclick="setLevel('b2')" id="btn-b2" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-rt-600 text-white shadow-md">B2</button>
-            <button onclick="setLevel('c1')" id="btn-c1" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">C1</button>
-        </div>
-        <span class="text-[10px] text-slate-400 text-center font-medium">Sprachlevel</span>
-    </div>
-
     <script>
         // ===== Scroll Reveal =====
         const observer = new IntersectionObserver((entries) => {
@@ -1291,35 +1282,15 @@
             }
         });
 
-        // ===== GER Level Switcher (B1 / B2 / C1) =====
-        function setLevel(level) {
-            document.body.classList.add('level-switching');
-
+        // ===== Set fixed language level: B2 =====
+        function setLevel() {
             document.querySelectorAll('[data-b1][data-b2][data-c1]').forEach(el => {
-                el.textContent = el.dataset[level];
+                el.textContent = el.dataset.b2;
             });
-
-            // Update button styling
-            ['b1', 'b2', 'c1'].forEach(l => {
-                const btn = document.getElementById('btn-' + l);
-                if (l === level) {
-                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-rt-600 text-white shadow-md';
-                } else {
-                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200';
-                }
-            });
-
-            // Persist
-            localStorage.setItem('ruhrtech-lang-level', level);
-
-            setTimeout(() => {
-                document.body.classList.remove('level-switching');
-            }, 150);
         }
 
-        // Load saved level on page load (default B2)
-        const savedLevel = localStorage.getItem('ruhrtech-lang-level') || 'b2';
-        setLevel(savedLevel);
+        // Apply B2 on page load
+        setLevel();
 
         // ===== Smooth Scroll for Nav Links =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
