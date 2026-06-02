@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>RuhrTech Industries GmbH | Special Machine Engineering | Essen & Worldwide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        rt: {
+                            50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe',
+                            500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af',
+                            800: '#1e3a5f', 900: '#0f2744', 950: '#0a1929'
+                        },
+                        accent: {
+                            400: '#fb923c', 500: '#f97316', 600: '#ea580c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left {
+            opacity: 0; transform: translateX(-30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right {
+            opacity: 0; transform: translateX(30px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        .lightbox-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            background: rgba(2, 6, 23, 0.92); backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .lightbox-overlay.active { opacity: 1; pointer-events: auto; }
+        .lightbox-content {
+            max-width: 90vw; max-height: 90vh;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border-radius: 1rem; overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        .lightbox-overlay.active .lightbox-content { transform: scale(1); }
+        .lightbox-content img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+        .lightbox-close {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            color: white; cursor: pointer;
+            background: rgba(255,255,255,0.1); border-radius: 50%;
+            width: 3rem; height: 3rem; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.25); }
+
+        /* Desktop org tree */
+        .org-tree ul { padding-top: 20px; position: relative; }
+        .org-tree li {
+            float: left; text-align: center; list-style-type: none;
+            position: relative; padding: 20px 5px 0 5px;
+        }
+        .org-tree li::before, .org-tree li::after {
+            content: ''; position: absolute; top: 0; right: 50%;
+            border-top: 2px solid #475569; width: 50%; height: 20px;
+        }
+        .org-tree li::after { right: auto; left: 50%; border-left: 2px solid #475569; }
+        .org-tree li:only-child::after, .org-tree li:only-child::before { display: none; }
+        .org-tree li:only-child { padding-top: 0; }
+        .org-tree li:first-child::before, .org-tree li:last-child::after { border: 0 none; }
+        .org-tree li:last-child::before { border-right: 2px solid #475569; border-radius: 0 5px 0 0; }
+        .org-tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .org-tree ul ul::before {
+            content: ''; position: absolute; top: 0; left: 50%;
+            border-left: 2px solid #475569; width: 0; height: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .org-tree { min-width: auto !important; overflow-x: visible; }
+            .org-tree ul { padding-top: 0; }
+            .org-tree li {
+                float: none; width: 100%; padding: 8px 0;
+            }
+            .org-tree li::before, .org-tree li::after,
+            .org-tree ul ul::before { display: none !important; }
+            .org-tree li > div { width: 100% !important; max-width: 280px; margin: 0 auto; }
+        }
+
+        .nav-link { position: relative; min-height: 44px; display: flex; align-items: center; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 2px; background: #f97316; transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
+        .mobile-menu.open { transform: translateX(0); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+
+        [data-b1][data-b2][data-c1] { transition: opacity 0.2s ease; }
+        .level-switching [data-b1][data-b2][data-c1] { opacity: 0.4; }
+
+        @media (max-width: 768px) {
+            .reveal, .reveal-left, .reveal-right {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed w-full z-50 top-0" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#" class="flex-shrink-0 flex items-center gap-3 py-1">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-rt-700 to-rt-900 flex items-center justify-center text-white font-black text-xl shadow-lg">RT</div>
+                    <div class="hidden sm:block">
+                        <div class="font-bold text-slate-900 text-lg leading-tight">RuhrTech</div>
+                        <div class="text-xs text-slate-500 leading-tight">Industries GmbH</div>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="nav-link text-slate-600 hover:text-rt-600 font-medium transition">About Us</a>
+                    <a href="#solutions" class="nav-link text-slate-600 hover:text-rt-600 font-medium transition">Solutions</a>
+                    <a href="#careers" class="nav-link text-slate-600 hover:text-rt-600 font-medium transition">Careers</a>
+                    <a href="#team" class="nav-link text-slate-600 hover:text-rt-600 font-medium transition">Our Team</a>
+                    <a href="#contact" class="bg-accent-500 hover:bg-accent-600 text-white px-5 py-2.5 rounded-lg font-medium transition shadow-lg shadow-accent-500/25">Contact</a>
+                </div>
+                <button class="md:hidden text-slate-600 hover:text-rt-600 transition p-2" onclick="toggleMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-72 h-full bg-white shadow-2xl z-50 p-8">
+            <button onclick="toggleMenu()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="mt-12 flex flex-col space-y-6">
+                <a href="#about" onclick="toggleMenu()" class="text-lg font-medium text-slate-700 hover:text-rt-600 transition">About Us</a>
+                <a href="#solutions" onclick="toggleMenu()" class="text-lg font-medium text-slate-700 hover:text-rt-600 transition">Solutions</a>
+                <a href="#careers" onclick="toggleMenu()" class="text-lg font-medium text-slate-700 hover:text-rt-600 transition">Careers</a>
+                <a href="#team" onclick="toggleMenu()" class="text-lg font-medium text-slate-700 hover:text-rt-600 transition">Our Team</a>
+                <a href="#contact" onclick="toggleMenu()" class="bg-accent-500 text-white px-5 py-3 rounded-lg font-medium text-center">Contact</a>
+            </div>
+        </div>
+        <div id="menuOverlay" class="fixed inset-0 bg-black/50 z-40 hidden" onclick="toggleMenu()"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-20">
+        <div class="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-rt-950/92 via-rt-900/88 to-slate-900/85"></div>
+
+            <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                <div class="reveal">
+                    <span class="inline-block py-1 px-4 rounded-full bg-rt-900/60 text-white text-sm font-semibold mb-5 border border-rt-400/50 backdrop-blur-sm">
+                        <span data-b1="Headquarters Essen · Subsidiaries Shanghai & Detroit"
+                              data-b2="Head Office Essen · Branches in Shanghai & Detroit"
+                              data-c1="Corporate HQ Essen · International Subsidiaries in Shanghai & Detroit">
+                            Headquarters Essen · Subsidiaries Shanghai & Detroit
+                        </span>
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight tracking-tight">
+                        <span data-b1="Precision Engineering for the Automotive Industry"
+                              data-b2="Special Machine Engineering for the Global Automotive Supply Chain"
+                              data-c1="Precision-Engineered Special Machinery for the Global Automotive Value Chain">
+                            Precision Engineering for the Automotive Industry
+                        </span>
+                    </h1>
+                    <p class="text-base md:text-lg text-white/80 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                        <span data-b1="We design and build CNC machines, assembly lines, and test stands. Our customers are automotive suppliers all over the world."
+                              data-b2="We design and manufacture CNC milling machines, automated assembly lines, and quality assurance test stands. Our clients are tier 1 and tier 2 automotive suppliers worldwide."
+                              data-c1="We conceive, engineer, and manufacture CNC milling solutions, automated assembly lines, and quality assurance test platforms for tier 1 and tier 2 automotive suppliers across global markets.">
+                            We design and build CNC machines, assembly lines, and test stands. Our customers are automotive suppliers all over the world.
+                        </span>
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <a href="#solutions" class="bg-accent-500 hover:bg-accent-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition">
+                            <span data-b1="Our Solutions" data-b2="Explore Our Solutions" data-c1="Discover Our Engineering Solutions">Our Solutions</span>
+                        </a>
+                        <a href="#about" class="bg-transparent border-2 border-white/30 text-white font-bold py-3 px-6 rounded-xl hover:bg-white/10 transition">
+                            <span data-b1="About Our Company" data-b2="About Our Company" data-c1="About Our Organisation">About Our Company</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+                <svg class="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <div class="bg-white shadow-lg -mt-8 relative z-20 mx-4 md:mx-auto max-w-5xl rounded-2xl border border-slate-100">
+        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-100">
+            <div class="p-6 md:p-8 text-center reveal">
+                <div class="text-3xl md:text-4xl font-bold text-rt-600">2010</div>
+                <div class="text-sm text-slate-500 mt-1 font-medium">
+                    <span data-b1="Founded in Essen" data-b2="Established in Essen, Germany" data-c1="Established in Essen, NRW">Founded in Essen</span>
+                </div>
+            </div>
+            <div class="p-6 md:p-8 text-center reveal delay-100">
+                <div class="text-3xl md:text-4xl font-bold text-rt-600">850+</div>
+                <div class="text-sm text-slate-500 mt-1 font-medium">
+                    <span data-b1="Employees" data-b2="Staff Members Worldwide" data-c1="Personnel Worldwide">Employees</span>
+                </div>
+            </div>
+            <div class="p-6 md:p-8 text-center reveal delay-200">
+                <div class="text-3xl md:text-4xl font-bold text-rt-600">3</div>
+                <div class="text-sm text-slate-500 mt-1 font-medium">
+                    <span data-b1="Locations Worldwide" data-b2="International Locations" data-c1="International Facilities">Locations Worldwide</span>
+                </div>
+            </div>
+            <div class="p-6 md:p-8 text-center reveal delay-300">
+                <div class="text-3xl md:text-4xl font-bold text-rt-600">65%</div>
+                <div class="text-sm text-slate-500 mt-1 font-medium">
+                    <span data-b1="Export Rate" data-b2="Export Quota" data-c1="Export Ratio">Export Rate</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About / Company Profile -->
+    <section id="about" class="py-20 px-6 max-w-6xl mx-auto">
+        <div class="text-center mb-14 reveal">
+            <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Company Profile</span>
+            <h2 class="text-4xl font-bold text-slate-900 mt-2">About RuhrTech Industries</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="reveal-left">
+                <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                    <span data-b1="RuhrTech Industries GmbH is a German special machine engineering company based in Essen, North Rhine-Westphalia. We are registered as a Gesellschaft mit beschränkter Haftung (GmbH), a German limited liability company."
+                          data-b2="RuhrTech Industries GmbH is a German special machine engineering company headquartered in Essen, North Rhine-Westphalia. As a Gesellschaft mit beschränkter Haftung (GmbH), we operate as a limited liability company under German law."
+                          data-c1="RuhrTech Industries GmbH is a German special machine engineering enterprise headquartered in Essen, North Rhine-Westphalia. Constituted as a Gesellschaft mit beschränkter Haftung (GmbH), we operate with limited shareholder liability under the German Limited Liability Companies Act (GmbHG).">
+                        RuhrTech Industries GmbH is a German special machine engineering company based in Essen. We are a GmbH, a German limited liability company.
+                    </span>
+                </p>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    <span data-b1="We design and make CNC milling machines, assembly lines, and test stands for the automotive industry. Our customers are mainly tier 1 and tier 2 suppliers. We sell to clients in Europe, Asia, and North America."
+                          data-b2="We design and manufacture CNC milling machines, automated assembly lines, and quality assurance test stands for the automotive supply industry. Our core customers are tier 1 and tier 2 automotive suppliers. We serve clients across Europe, Asia, and North America."
+                          data-c1="We specialise in the design and manufacture of CNC milling solutions, automated assembly systems, and quality assurance test platforms for the automotive supply sector. Our primary clientele comprises tier 1 and tier 2 automotive suppliers spanning European, Asian, and North American markets.">
+                        We design and make CNC milling machines, assembly lines, and test stands for the automotive industry. We sell to clients around the world.
+                    </span>
+                </p>
+                <div class="bg-rt-50 border-l-4 border-rt-500 p-5 rounded-r-lg mb-6">
+                    <h4 class="font-bold text-rt-800 mb-2">Our Mission</h4>
+                    <p class="text-rt-700 text-sm">
+                        <span data-b1="We build machines that make automotive production faster, more precise, and more efficient. Engineering excellence, made in Germany."
+                              data-b2="We engineer machines that enhance speed, precision, and efficiency in automotive production. Engineering excellence — made in Germany."
+                              data-c1="We engineer machinery that optimises throughput, precision, and operational efficiency across automotive production environments. German engineering excellence — globally deployed.">
+                            We build machines that make automotive production faster, more precise, and more efficient. Engineering excellence, made in Germany.
+                        </span>
+                    </p>
+                </div>
+                <ul class="space-y-3 text-slate-700">
+                    <li class="flex items-start gap-3">
+                        <span class="text-rt-500 mt-1">●</span>
+                        <span><strong>Business areas:</strong>
+                            <span data-b1="CNC milling machines, assembly lines, and test stands"
+                                  data-b2="CNC milling machines, automated assembly lines, and QA test stands"
+                                  data-c1="5-axis CNC milling centres, automated assembly lines, and integrated QA test platforms">CNC milling machines, assembly lines, and test stands</span>
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-rt-500 mt-1">●</span>
+                        <span><strong>Clients:</strong>
+                            <span data-b1="Tier 1 and tier 2 automotive suppliers around the world"
+                                  data-b2="Tier 1 and tier 2 automotive suppliers across global markets"
+                                  data-c1="Tier 1 and tier 2 automotive component manufacturers across global markets">Tier 1 and tier 2 automotive suppliers around the world</span>
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-rt-500 mt-1">●</span>
+                        <span><strong>Markets:</strong>
+                            <span data-b1="Europe, Asia, and North America"
+                                  data-b2="Europe, Asia, and North America"
+                                  data-c1="European Union, Asia-Pacific, and NAFTA markets">Europe, Asia, and North America</span>
+                        </span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-rt-500 mt-1">●</span>
+                        <span><strong>Certifications:</strong>
+                            <span data-b1="ISO 9001, ISO 14001, IATF 16949"
+                                  data-b2="ISO 9001, ISO 14001, IATF 16949"
+                                  data-c1="ISO 9001:2015, ISO 14001:2015, IATF 16949:2016">ISO 9001, ISO 14001, IATF 16949</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="reveal-right">
+                <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100">Company Facts</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Company Name</span>
+                            <span class="text-slate-900 font-semibold">RuhrTech Industries GmbH</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Legal Form</span>
+                            <span class="text-slate-900 font-semibold">GmbH (Limited Liability)</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Headquarters</span>
+                            <span class="text-slate-900 font-semibold">Essen, NRW, Germany</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Subsidiaries</span>
+                            <span class="text-slate-900 font-semibold">Shanghai · Detroit</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Industry</span>
+                            <span class="text-slate-900 font-semibold">Special Machine Engineering</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Founded</span>
+                            <span class="text-slate-900 font-semibold">2010</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Employees</span>
+                            <span class="text-slate-900 font-semibold">850+</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-slate-50">
+                            <span class="text-slate-500 font-medium">Export Rate</span>
+                            <span class="text-slate-900 font-semibold">~65%</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3">
+                            <span class="text-slate-500 font-medium">CEO</span>
+                            <span class="text-slate-900 font-semibold">Dr. Markus Krüger</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="py-20 px-6 bg-slate-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-14 reveal">
+                <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Our Solutions</span>
+                <h2 class="text-4xl font-bold text-slate-900 mt-2">Core Product Lines</h2>
+                <p class="text-slate-500 mt-3 max-w-xl mx-auto">
+                    <span data-b1="Special machines that automotive suppliers use every day. Designed and built in Germany."
+                          data-b2="Special-purpose machinery engineered for daily use by automotive suppliers. Designed and manufactured in Germany."
+                          data-c1="Special-purpose machinery engineered for continuous operation by automotive component manufacturers. Designed and manufactured at our Essen facility.">
+                        Special machines that automotive suppliers use every day. Designed and built in Germany.
+                    </span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Product 1: PrecisionMill CNC-800 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group reveal hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                    <div class="relative overflow-hidden bg-slate-50 h-72 flex items-center justify-center p-4">
+                        <img src="https://images.unsplash.com/photo-1565193566173-7a0af2bf2306?auto=format&fit=crop&w=800&q=80"
+                             alt="PrecisionMill CNC-800 - 5-Axis CNC Milling Machine"
+                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+                             onclick="openLightbox(this.src)" title="Click to enlarge">
+                    </div>
+                    <div class="p-7 flex-grow">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Flagship</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">PrecisionMill CNC-800</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <span data-b1="5-axis CNC milling machine for high-precision metal parts. Works 24/7 with very low downtime. Ideal for engine parts, transmission components, and structural parts."
+                                  data-b2="5-axis CNC milling centre for high-precision metal component manufacturing. Engineered for 24/7 operation with minimal downtime. Suitable for engine components, transmission parts, and structural elements."
+                                  data-c3="5-axis CNC milling centre engineered for high-precision machining of metal components. Designed for continuous 24/7 operation with negligible downtime. Optimised for engine components, transmission assemblies, and structural chassis parts.">
+                                5-axis CNC milling machine for high-precision metal parts. Works 24/7 with very low downtime.
+                            </span>
+                        </p>
+                        <ul class="text-sm text-slate-500 space-y-1 mb-4">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="5-axis machining for complex parts"
+                                      data-b2="Simultaneous 5-axis interpolation"
+                                      data-c1="Simultaneous 5-axis interpolation (±2.5 µm)">5-axis machining for complex parts</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="High-speed spindle: 24,000 rpm"
+                                      data-b2="High-speed spindle: 24,000 rpm"
+                                      data-c1="High-speed spindle: 24,000 rpm with HSK-A63 interface">High-speed spindle: 24,000 rpm</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Automatic tool changer with 120 tools"
+                                      data-b2="ATC with 120-tool magazine"
+                                      data-c1="Automatic tool changer: 120-tool magazine capacity">Automatic tool changer with 120 tools</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="px-7 pb-7 mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                        <span class="text-rt-700 font-bold bg-rt-50 px-3 py-1.5 rounded-lg text-sm">Item No: CNC-800</span>
+                        <span class="text-slate-400 text-sm">CNC Machining</span>
+                    </div>
+                </div>
+
+                <!-- Product 2: AutoLine AL-4000 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group reveal delay-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                    <div class="relative overflow-hidden bg-slate-50 h-72 flex items-center justify-center p-4">
+                        <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45a7?auto=format&fit=crop&w=800&q=80"
+                             alt="AutoLine AL-4000 - Modular Assembly Line"
+                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+                             onclick="openLightbox(this.src)" title="Click to enlarge">
+                    </div>
+                    <div class="p-7 flex-grow">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-rt-100 text-rt-700 text-xs font-bold px-2 py-1 rounded-full">Modular</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">AutoLine AL-4000</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <span data-b1="Modular assembly line system with robotic stations. You can add more stations as your production grows. Works with all common industrial robots."
+                                  data-b2="Modular assembly line system with integrated robotic workstations. Scalable architecture allows you to add stations as production volumes increase. Compatible with all major industrial robot manufacturers."
+                                  data-c1="Modular assembly line platform featuring integrated robotic workstations. Scalable architecture accommodates incremental capacity expansion as production volumes grow. Fully interoperable with all major industrial robot OEMs.">
+                                Modular assembly line system with robotic stations. You can add more stations as your production grows.
+                            </span>
+                        </p>
+                        <ul class="text-sm text-slate-500 space-y-1 mb-4">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Modular design, easy to expand"
+                                      data-b2="Modular design for flexible expansion"
+                                      data-c1="Modular architecture for scalable expansion">Modular design, easy to expand</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Robot stations from KUKA, ABB, Fanuc"
+                                      data-b2="KUKA, ABB, and Fanuc robot integration"
+                                      data-c1="Pre-integrated with KUKA, ABB, and Fanuc robotic arms">Robot stations from KUKA, ABB, Fanuc</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Up to 30 units per minute"
+                                      data-b2="Throughput: up to 30 units per minute"
+                                      data-c1="Throughput capacity: up to 30 units per minute">Up to 30 units per minute</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="px-7 pb-7 mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                        <span class="text-rt-700 font-bold bg-rt-50 px-3 py-1.5 rounded-lg text-sm">Item No: AL-4000</span>
+                        <span class="text-slate-400 text-sm">Assembly Systems</span>
+                    </div>
+                </div>
+
+                <!-- Product 3: TestMaster TM-600 -->
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group reveal delay-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                    <div class="relative overflow-hidden bg-slate-50 h-72 flex items-center justify-center p-4">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80"
+                             alt="TestMaster TM-600 - Automated Test Stand"
+                             class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 cursor-pointer"
+                             onclick="openLightbox(this.src)" title="Click to enlarge">
+                    </div>
+                    <div class="p-7 flex-grow">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded-full">QA Solution</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">TestMaster TM-600</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <span data-b1="Automated test stand for quality checks. Measures every part and finds problems automatically. Reports are created without any manual work."
+                                  data-b2="Automated quality assurance test stand for component inspection. Measures critical dimensions and detects defects automatically. Generates comprehensive QA reports without manual intervention."
+                                  data-c1="Automated quality assurance test platform for comprehensive component inspection. Measures critical dimensional parameters and autonomously detects manufacturing defects. Generates detailed QA documentation without operator intervention.">
+                                Automated test stand for quality checks. Measures every part and finds problems automatically.
+                            </span>
+                        </p>
+                        <ul class="text-sm text-slate-500 space-y-1 mb-4">
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Measures with ±0.001 mm precision"
+                                      data-b2="Precision: ±0.001 mm"
+                                      data-c1="Measurement precision: ±0.001 mm">Measures with ±0.001 mm precision</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Works with IATF 16949 standards"
+                                      data-b2="IATF 16949-compliant reporting"
+                                      data-c1="IATF 16949:2016-compliant documentation">Works with IATF 16949 standards</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rt-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                <span data-b1="Automatic reports and data export"
+                                      data-b2="Automatic report generation and data export"
+                                      data-c1="Automated report generation with ERP/MES integration">Automatic reports and data export</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="px-7 pb-7 mt-auto flex items-center justify-between border-t border-slate-100 pt-4">
+                        <span class="text-rt-700 font-bold bg-rt-50 px-3 py-1.5 rounded-lg text-sm">Item No: TM-600</span>
+                        <span class="text-slate-400 text-sm">Quality Assurance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Engineering Services Section -->
+    <section class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center gap-16">
+            <div class="md:w-1/2 reveal-left">
+                <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Engineering Services</span>
+                <h2 class="text-4xl font-bold text-slate-900 mt-2 mb-6 leading-tight">
+                    <span data-b1="Full-Service Engineering" data-b2="Integrated Engineering Services" data-c1="Comprehensive Engineering Solutions">Full-Service Engineering</span>
+                </h2>
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    <span data-b1="We do not just sell machines. We also plan, install, and maintain them. Our engineers work with your team from the first idea to full production."
+                          data-b2="We do not merely supply machinery. We plan, install, and maintain your entire production system. Our engineering team supports you from initial concept through to full-scale production."
+                          data-c1="Beyond machinery supply, we offer end-to-end project lifecycle support. Our engineering division partners with your team from initial feasibility studies through to full-scale production ramp-up and ongoing maintenance.">
+                        We do not just sell machines. We also plan, install, and maintain them.
+                    </span>
+                </p>
+                <ul class="space-y-5">
+                    <li class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-sm border border-slate-100">
+                        <div class="w-12 h-12 rounded-full bg-rt-100 text-rt-600 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 font-bold text-lg">
+                                <span data-b1="Custom Engineering" data-b2="Custom Engineering Solutions" data-c1="Bespoke Engineering Solutions">Custom Engineering</span>
+                            </strong>
+                            <span class="text-slate-600">
+                                <span data-b1="We design machines that match your specific production needs."
+                                      data-b2="We design machinery tailored to your specific production requirements."
+                                      data-c1="We develop bespoke machinery solutions configured to your precise manufacturing specifications.">
+                                    We design machines that match your specific production needs.
+                                </span>
+                            </span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-sm border border-slate-100">
+                        <div class="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 font-bold text-lg">
+                                <span data-b1="Global Maintenance" data-b2="Global Maintenance & Support" data-c1="Global Maintenance & Technical Support">Global Maintenance</span>
+                            </strong>
+                            <span class="text-slate-600">
+                                <span data-b1="Service technicians in Germany, China, and the USA. Fast help when you need it."
+                                      data-b2="Service technicians based in Germany, China, and the USA. Rapid support when you need it."
+                                      data-c1="Dedicated service technicians stationed in Germany, China, and the United States for rapid on-site support.">
+                                    Service technicians in Germany, China, and the USA. Fast help when you need it.
+                                </span>
+                            </span>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4 p-4 rounded-xl bg-white shadow-sm border border-slate-100">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <div>
+                            <strong class="block text-slate-900 font-bold text-lg">
+                                <span data-b1="Operator Training" data-b2="Operator Training Programmes" data-c1="Operator Training & Certification Programmes">Operator Training</span>
+                            </strong>
+                            <span class="text-slate-600">
+                                <span data-b1="We train your staff on site or at our training centre in Essen."
+                                      data-b2="We train your personnel on site at your facility or at our training centre in Essen."
+                                      data-c1="Training delivered on site at your facility or at our dedicated training centre in Essen, NRW.">
+                                    We train your staff on site or at our training centre in Essen.
+                                </span>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="md:w-1/2 reveal-right">
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-rt-500 to-accent-400 rounded-3xl opacity-15 blur-2xl"></div>
+                    <div class="relative bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-4">Why Clients Choose RuhrTech</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-rt-50 flex items-center justify-center text-rt-600 font-bold text-xl">99.7%</div>
+                                <div>
+                                    <div class="font-bold text-slate-900">Machine Availability</div>
+                                    <div class="text-sm text-slate-500">
+                                        <span data-b1="Average uptime across all our machines"
+                                              data-b2="Average uptime across all installed machinery"
+                                              data-c1="Mean uptime across all installed machinery">Average uptime across all our machines</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-green-50 flex items-center justify-center text-green-600 font-bold text-xl">ISO</div>
+                                <div>
+                                    <div class="font-bold text-slate-900">Triple Certified</div>
+                                    <div class="text-sm text-slate-500">
+                                        <span data-b1="ISO 9001, ISO 14001, and IATF 16949"
+                                              data-b2="ISO 9001, ISO 14001, and IATF 16949 certified"
+                                              data-c1="Certified to ISO 9001, ISO 14001, and IATF 16949">ISO 9001, ISO 14001, and IATF 16949</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 font-bold text-xl">15+</div>
+                                <div>
+                                    <div class="font-bold text-slate-900">Years of Experience</div>
+                                    <div class="text-sm text-slate-500">
+                                        <span data-b1="Engineering since 2010"
+                                              data-b2="Special machine engineering since 2010"
+                                              data-c1="Delivering special machinery solutions since 2010">Engineering since 2010</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Careers / Working Here Section -->
+    <section id="careers" class="py-20 px-6 bg-gradient-to-br from-slate-100 to-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14 reveal">
+                <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Join Our Team</span>
+                <h2 class="text-4xl font-bold text-slate-900 mt-2">
+                    <span data-b1="Working at RuhrTech Industries"
+                          data-b2="Working at RuhrTech Industries"
+                          data-c1="A Career at RuhrTech Industries">Working at RuhrTech Industries</span>
+                </h2>
+                <p class="text-slate-500 mt-3 max-w-xl mx-auto">
+                    <span data-b1="We are growing and looking for new team members at our Essen headquarters. Find out about our current openings."
+                          data-b2="We are expanding and currently recruiting new team members at our Essen headquarters. Explore our current vacancies."
+                          data-c1="We are undergoing strategic expansion and currently recruiting at our Essen headquarters. Explore our current vacancies below.">
+                        We are growing and looking for new team members at our Essen headquarters.
+                    </span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <!-- Job Description Card -->
+                <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 reveal-left">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 rounded-full bg-rt-100 text-rt-600 flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Junior Industrial Clerk</h3>
+                            <p class="text-sm text-slate-500">Essen HQ · Full-time · Industriekaufmann/-frau</p>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-600 mb-6">
+                        <span data-b1="We are looking for motivated Junior Industrial Clerks to join our Essen team. You will work in different departments like Sales, Purchasing, Logistics, and HR. This is a great opportunity to learn how an international engineering company works."
+                              data-b2="We are seeking motivated Junior Industrial Clerks to join our Essen headquarters. You will rotate through departments including Sales, Procurement, Logistics, and HR. This is an excellent opportunity to gain insight into the operations of an international engineering firm."
+                              data-c1="We are seeking ambitious Junior Industrial Clerks to join our Essen headquarters. You will rotate across departments including Sales, Procurement, Logistics, and Human Resources. This represents an outstanding opportunity to gain comprehensive insight into the operations of an internationally active engineering enterprise.">
+                            We are looking for motivated Junior Industrial Clerks to join our Essen team. You will work in different departments like Sales, Purchasing, Logistics, and HR.
+                        </span>
+                    </p>
+
+                    <h4 class="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">Your Tasks:</h4>
+                    <ul class="space-y-2 text-slate-600 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <span class="text-rt-500 mt-0.5">▸</span>
+                            <span data-b1="Process customer orders and supplier inquiries"
+                                  data-b2="Process customer orders and handle supplier inquiries"
+                                  data-c1="Process customer orders and manage supplier inquiries">Process customer orders and supplier inquiries</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-rt-500 mt-0.5">▸</span>
+                            <span data-b1="Prepare quotations and purchase orders"
+                                  data-b2="Prepare quotations and purchase orders"
+                                  data-c1="Prepare detailed quotations and purchase orders">Prepare quotations and purchase orders</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-rt-500 mt-0.5">▸</span>
+                            <span data-b1="Help with logistics and shipping to international customers"
+                                  data-b2="Coordinate logistics and international shipping"
+                                  data-c1="Coordinate logistics and international freight forwarding">Help with logistics and shipping to international customers</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-rt-500 mt-0.5">▸</span>
+                            <span data-b1="Update the ERP system and customer database"
+                                  data-b2="Maintain and update the ERP system and customer database"
+                                  data-c1="Maintain and update the ERP system and CRM database">Update the ERP system and customer database</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-rt-500 mt-0.5">▸</span>
+                            <span data-b1="Communicate with suppliers and customers in English"
+                                  data-b2="Communicate with international suppliers and customers in English"
+                                  data-c1="Communicate with international suppliers and customers in English">Communicate with suppliers and customers in English</span>
+                        </li>
+                    </ul>
+
+                    <h4 class="font-bold text-slate-900 mb-3 text-sm uppercase tracking-wide">What We Offer:</h4>
+                    <ul class="space-y-2 text-slate-600 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 mt-0.5">✓</span>
+                            <span data-b1="Modern office in Essen with good public transport connections"
+                                  data-b2="Modern office in Essen with excellent public transport links"
+                                  data-c1="Modern office facility in Essen with excellent public transport connections">Modern office in Essen with good public transport connections</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 mt-0.5">✓</span>
+                            <span data-b1="International team with English as a working language"
+                                  data-b2="International team with English as a working language"
+                                  data-c1="Multinational team — English is a working language">International team with English as a working language</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 mt-0.5">✓</span>
+                            <span data-b1="Training programme and career development"
+                                  data-b2="Structured training programme and career development"
+                                  data-c1="Structured professional development and career advancement">Training programme and career development</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 mt-0.5">✓</span>
+                            <span data-b1="30 days of holiday and flexible working hours"
+                                  data-b2="30 days annual leave and flexible working hours"
+                                  data-c1="30 days annual leave, flexible working hours, and a company pension scheme">30 days of holiday and flexible working hours</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-500 mt-0.5">✓</span>
+                            <span data-b1="Travel opportunities to our offices in Shanghai and Detroit"
+                                  data-b2="Travel opportunities to our subsidiaries in Shanghai and Detroit"
+                                  data-c1="International travel opportunities to our subsidiaries in Shanghai and Detroit">Travel opportunities to our offices in Shanghai and Detroit</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Daily Routine Card -->
+                <div class="reveal-right">
+                    <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-8">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-full bg-rt-100 text-rt-600 flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </span>
+                            <span data-b1="A Typical Day at RuhrTech"
+                                  data-b2="A Typical Day at RuhrTech"
+                                  data-c1="A Typical Day at RuhrTech">A Typical Day at RuhrTech</span>
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-4 pb-4 border-b border-slate-100">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">07:30</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="Start of Work" data-b2="Start of Business" data-c1="Commencement of Business">Start of Work</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="Check emails, look at the production plan for the day, and have a short meeting with your team."
+                                              data-b2="Review emails, examine the daily production schedule, and attend a brief team meeting."
+                                              data-c1="Review correspondence, assess the daily production schedule, and attend the morning team briefing.">Check emails, look at the production plan, and have a short meeting with your team.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 pb-4 border-b border-slate-100">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">09:00</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="Supplier Contact" data-b2="Supplier Communication" data-c1="Supplier Liaison">Supplier Contact</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="Call or email suppliers about orders, delivery times, and prices. Talk to suppliers in China or the USA."
+                                              data-b2="Contact suppliers regarding orders, lead times, and pricing. Communicate with suppliers in China and the USA."
+                                              data-c1="Liaise with suppliers regarding purchase orders, lead times, and pricing. Correspond with suppliers in the Asia-Pacific and North American regions.">Call or email suppliers about orders, delivery times, and prices.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 pb-4 border-b border-slate-100">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">11:00</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="Order Processing" data-b2="Order Processing" data-c1="Order Fulfilment">Order Processing</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="Enter new customer orders into the ERP system. Create order confirmations and send them to clients."
+                                              data-b2="Enter new customer orders into the ERP system. Generate order confirmations and send them to clients."
+                                              data-c1="Process incoming customer orders in the ERP system. Generate and dispatch order confirmations to clients.">Enter new customer orders into the ERP system.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 pb-4 border-b border-slate-100">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">12:30</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="Lunch Break" data-b2="Lunch Break" data-c1="Lunch Recess">Lunch Break</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="30-minute break. There is a canteen in the building or you can go to a restaurant nearby."
+                                              data-b2="30-minute break. Our building has a staff canteen, and there are several restaurants in the surrounding area."
+                                              data-c1="30-minute lunch break. The building features a staff canteen, and numerous restaurants are located in the vicinity.">30-minute break. Canteen available or nearby restaurants.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 pb-4 border-b border-slate-100">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">14:00</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="Project Work" data-b2="Project Coordination" data-c1="Project Coordination">Project Work</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="Work on a special project, for example preparing documents for a new machine export to the USA."
+                                              data-b2="Work on a special project, such as preparing export documentation for a new machine shipment to the USA."
+                                              data-c1="Advance a special project, for instance preparing export documentation for a new machinery shipment to the North American market.">Work on a special project, like export documents for the USA.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="text-rt-600 font-bold text-sm w-16 text-right flex-shrink-0">16:00</div>
+                                <div>
+                                    <div class="font-semibold text-slate-900 text-sm">
+                                        <span data-b1="End of Workday" data-b2="Close of Business" data-c1="Close of Business">End of Workday</span>
+                                    </div>
+                                    <div class="text-slate-500 text-sm">
+                                        <span data-b1="Finish open tasks, update the team on your progress, and plan the next day."
+                                              data-b2="Complete outstanding tasks, update the team on your progress, and plan for the following day."
+                                              data-c1="Finalise outstanding tasks, brief the team on your progress, and prepare the agenda for the following day.">Finish open tasks and plan the next day.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-rt-50 rounded-xl border border-rt-100">
+                            <p class="text-sm text-rt-800">
+                                <strong>
+                                    <span data-b1="Did you know?" data-b2="Did you know?" data-c1="Did you know?">Did you know?</span>
+                                </strong>
+                                <span data-b1=" Friday is 'English Day' at RuhrTech. All meetings and emails are in English to help everyone practice."
+                                      data-b2=" Friday is 'English Day' at RuhrTech. All meetings and emails are conducted in English to support language development."
+                                      data-c1=" Friday is designated 'English Day' at RuhrTech. All meetings and correspondence are conducted in English to foster continuous language development.">
+                                     Friday is 'English Day' at RuhrTech. All meetings and emails are in English.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Team / Org Chart -->
+    <section id="team" class="py-20 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-14 reveal">
+            <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Our Organisation</span>
+            <h2 class="text-4xl font-bold text-slate-900 mt-2">
+                <span data-b1="The RuhrTech Team" data-b2="The RuhrTech Team" data-c1="The RuhrTech Leadership Team">The RuhrTech Team</span>
+            </h2>
+            <p class="text-slate-500 mt-3 max-w-xl mx-auto">
+                <span data-b1="Meet the people who lead our company. Click on a photo to see it larger."
+                      data-b2="Meet the people who lead our company. Click any photo to enlarge it."
+                      data-c1="Meet the leadership team guiding our organisation. Click any portrait to enlarge.">Meet the people who lead our company.</span>
+            </p>
+        </div>
+
+        <!-- Org Chart (Desktop) -->
+        <div class="hidden md:block org-tree reveal" style="min-width: 900px; overflow-x: auto;">
+            <ul>
+                <li>
+                    <div style="width: 180px;">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=300&q=80"
+                             alt="Dr. Markus Krüger - CEO"
+                             class="w-20 h-20 rounded-full object-cover mx-auto mb-2 border-4 border-rt-500 cursor-pointer hover:scale-105 transition"
+                             onclick="openLightbox(this.src)">
+                        <div class="text-sm font-bold text-slate-900">Dr. Markus Krüger</div>
+                        <div class="text-xs text-rt-600 font-medium">Managing Director (CEO)</div>
+                        <div class="text-xs text-slate-400">Essen HQ</div>
+                    </div>
+                    <ul>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Petra Wagner - HR Director"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Petra Wagner</div>
+                                <div class="text-xs text-slate-500">HR Director</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Thomas Becker - Sales Director"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Thomas Becker</div>
+                                <div class="text-xs text-slate-500">Sales Director</div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div style="width: 170px;">
+                                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=300&q=80"
+                                             alt="Lisa Chen - Sales Manager Asia"
+                                             class="w-16 h-16 rounded-full object-cover mx-auto mb-2 border-2 border-accent-400 cursor-pointer hover:scale-105 transition"
+                                             onclick="openLightbox(this.src)">
+                                        <div class="text-sm font-semibold text-slate-900">Lisa Chen</div>
+                                        <div class="text-xs text-slate-500">Sales Manager Asia</div>
+                                        <div class="text-xs text-accent-500 font-medium">Shanghai</div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div style="width: 170px;">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=300&q=80"
+                                             alt="James O'Donnell - Plant Manager"
+                                             class="w-16 h-16 rounded-full object-cover mx-auto mb-2 border-2 border-accent-400 cursor-pointer hover:scale-105 transition"
+                                             onclick="openLightbox(this.src)">
+                                        <div class="text-sm font-semibold text-slate-900">James O'Donnell</div>
+                                        <div class="text-xs text-slate-500">Plant Manager NA</div>
+                                        <div class="text-xs text-accent-500 font-medium">Detroit</div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Michael Schneider - Production Manager"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Michael Schneider</div>
+                                <div class="text-xs text-slate-500">Production Manager</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Anna Lehmann - Head of Procurement"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Anna Lehmann</div>
+                                <div class="text-xs text-slate-500">Head of Procurement</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Daniel Yilmaz - Logistics Manager"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Daniel Yilmaz</div>
+                                <div class="text-xs text-slate-500">Logistics Manager</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div style="width: 180px;">
+                                <img src="https://images.unsplash.com/photo-1598550874175-4d0ef436c909?auto=format&fit=crop&w=300&h=300&q=80"
+                                     alt="Sabine Hoffmann - QA Manager"
+                                     class="w-18 h-18 rounded-full object-cover mx-auto mb-2 border-2 border-slate-300 cursor-pointer hover:scale-105 transition"
+                                     onclick="openLightbox(this.src)">
+                                <div class="text-sm font-semibold text-slate-900">Sabine Hoffmann</div>
+                                <div class="text-xs text-slate-500">QA Manager</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Team Grid (Mobile) -->
+        <div class="md:hidden grid grid-cols-2 gap-4 reveal">
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&h=300&q=80" alt="Dr. Markus Krüger" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Dr. Markus Krüger</div><div class="text-xs text-rt-600">CEO, Essen</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&h=300&q=80" alt="Petra Wagner" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Petra Wagner</div><div class="text-xs text-slate-500">HR Director</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=300&q=80" alt="Thomas Becker" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Thomas Becker</div><div class="text-xs text-slate-500">Sales Director</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&h=300&q=80" alt="Lisa Chen" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer border-2 border-accent-400" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Lisa Chen</div><div class="text-xs text-accent-500">Sales Asia, Shanghai</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&h=300&q=80" alt="James O'Donnell" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer border-2 border-accent-400" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">James O'Donnell</div><div class="text-xs text-accent-500">Plant NA, Detroit</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&h=300&q=80" alt="Michael Schneider" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Michael Schneider</div><div class="text-xs text-slate-500">Production Mgr.</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=300&h=300&q=80" alt="Anna Lehmann" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Anna Lehmann</div><div class="text-xs text-slate-500">Procurement</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 text-center shadow-sm border border-slate-100">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&h=300&q=80" alt="Daniel Yilmaz" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 cursor-pointer" onclick="openLightbox(this.src)">
+                <div class="text-sm font-bold">Daniel Yilmaz</div><div class="text-xs text-slate-500">Logistics Mgr.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6 bg-slate-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-14 reveal">
+                <span class="text-rt-600 font-semibold tracking-wider uppercase text-sm">Get in Touch</span>
+                <h2 class="text-4xl font-bold text-slate-900 mt-2">Contact Us</h2>
+                <p class="text-slate-500 mt-3 max-w-xl mx-auto">
+                    <span data-b1="Three locations to serve you. Our team is ready to help with your engineering needs."
+                          data-b2="Three international locations to serve you. Our team is ready to discuss your engineering requirements."
+                          data-c1="Three strategic locations worldwide. Our team is prepared to address your engineering requirements.">Three locations to serve you. Our team is ready to help.</span>
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Essen HQ -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-rt-500 p-8 reveal">
+                    <div class="w-14 h-14 rounded-full bg-rt-50 text-rt-600 flex items-center justify-center mb-5">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Essen Headquarters</h3>
+                    <p class="text-sm text-slate-500 mb-5">
+                        <span data-b1="Main Office & Production" data-b2="Head Office & Production" data-c1="Corporate HQ & Manufacturing">Main Office & Production</span>
+                    </p>
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex items-start gap-3"><span class="mt-0.5">📍</span> RuhrTech Industries GmbH<br>Ruhrallee 201, 45136 Essen, Germany</div>
+                        <div class="flex items-center gap-3"><span>📞</span> +49 201 1234 5678</div>
+                        <div class="flex items-center gap-3"><span>✉️</span> info@ruhrtech-industries.de</div>
+                    </div>
+                </div>
+
+                <!-- Shanghai -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-accent-400 p-8 reveal delay-100">
+                    <div class="w-14 h-14 rounded-full bg-orange-50 text-accent-500 flex items-center justify-center mb-5">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Shanghai Subsidiary</h3>
+                    <p class="text-sm text-slate-500 mb-5">
+                        <span data-b1="Sales & Service Asia" data-b2="Sales & Service Asia-Pacific" data-c1="Asia-Pacific Sales & Service">Sales & Service Asia</span>
+                    </p>
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex items-start gap-3"><span class="mt-0.5">📍</span> RuhrTech Industries Shanghai Ltd.<br>888 Huaihai Road, Shanghai 200020, China</div>
+                        <div class="flex items-center gap-3"><span>📞</span> +86 21 1234 5678</div>
+                        <div class="flex items-center gap-3"><span>✉️</span> shanghai@ruhrtech-industries.de</div>
+                        <div class="flex items-center gap-3 pt-2 border-t border-slate-100"><span>👤</span> Lisa Chen, Sales Manager Asia<br><span class="text-xs text-slate-400">lisa.chen@ruhrtech-industries.de</span></div>
+                    </div>
+                </div>
+
+                <!-- Detroit -->
+                <div class="bg-white rounded-2xl shadow-lg border-t-4 border-rt-700 p-8 reveal delay-200">
+                    <div class="w-14 h-14 rounded-full bg-rt-50 text-rt-700 flex items-center justify-center mb-5">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Detroit Subsidiary</h3>
+                    <p class="text-sm text-slate-500 mb-5">
+                        <span data-b1="Sales & Service North America" data-b2="Sales & Service North America" data-c1="North American Sales & Service">Sales & Service North America</span>
+                    </p>
+                    <div class="space-y-3 text-sm text-slate-600">
+                        <div class="flex items-start gap-3"><span class="mt-0.5">📍</span> RuhrTech Industries NA LLC<br>1001 Woodward Ave, Detroit, MI 48226, USA</div>
+                        <div class="flex items-center gap-3"><span>📞</span> +1 313 555 7890</div>
+                        <div class="flex items-center gap-3"><span>✉️</span> detroit@ruhrtech-industries.de</div>
+                        <div class="flex items-center gap-3 pt-2 border-t border-slate-100"><span>👤</span> James O'Donnell, Plant Manager<br><span class="text-xs text-slate-400">james.odonnell@ruhrtech-industries.de</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-16 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-10 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-rt-600 to-rt-900 flex items-center justify-center text-white font-black text-lg">RT</div>
+                        <div>
+                            <div class="font-bold text-white text-lg">RuhrTech</div>
+                            <div class="text-xs text-slate-400">Industries GmbH</div>
+                        </div>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs">
+                        <span data-b1="Precision special machine engineering for the global automotive industry. Designed and made in Essen, Germany."
+                              data-b2="Precision special machine engineering for the global automotive supply chain. Designed and manufactured in Essen, Germany."
+                              data-c1="Precision-engineered special machinery for the global automotive value chain. Conceived and manufactured in Essen, Germany.">Precision special machine engineering for the global automotive industry. Made in Essen, Germany.</span>
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#about" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#solutions" class="hover:text-white transition">Solutions</a></li>
+                        <li><a href="#careers" class="hover:text-white transition">Careers</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Our Locations</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start gap-2"><span class="mt-0.5">📍</span> Essen, Germany</li>
+                        <li class="flex items-start gap-2"><span class="mt-0.5">📍</span> Shanghai, China</li>
+                        <li class="flex items-start gap-2"><span class="mt-0.5">📍</span> Detroit, USA</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Certifications</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li>✅ ISO 9001:2015</li>
+                        <li>✅ ISO 14001:2015</li>
+                        <li>✅ IATF 16949:2016</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-8 text-center text-sm">
+                <p class="mb-2">© 2026 RuhrTech Industries GmbH. All rights reserved.</p>
+                <p class="text-slate-500 text-xs">Fictional company created for educational purposes (Berufskolleg NRW).</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 z-50 w-12 h-12 bg-rt-600 hover:bg-rt-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-300 opacity-0 translate-y-20 pointer-events-none" onclick="scrollToTop()">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
+
+    <!-- Lightbox -->
+    <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightboxImg" src="" alt="Enlarged view">
+        </div>
+    </div>
+
+    <!-- Language Level Switcher (B1 / B2 / C1) -->
+    <div class="fixed bottom-8 left-8 z-50 flex flex-col gap-1">
+        <div class="bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-slate-200 p-1.5 flex gap-1">
+            <button onclick="setLevel('b1')" id="btn-b1" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">B1</button>
+            <button onclick="setLevel('b2')" id="btn-b2" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-rt-600 text-white shadow-md">B2</button>
+            <button onclick="setLevel('c1')" id="btn-c1" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200">C1</button>
+        </div>
+        <span class="text-[10px] text-slate-400 text-center font-medium">Sprachlevel</span>
+    </div>
+
+    <script>
+        // ===== Scroll Reveal =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+        // ===== Navbar Shadow on Scroll =====
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.remove('shadow-sm');
+            } else {
+                navbar.classList.add('shadow-sm');
+                navbar.classList.remove('shadow-md');
+            }
+
+            // Back to Top button
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                btn.classList.remove('opacity-0', 'translate-y-20', 'pointer-events-none');
+                btn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            } else {
+                btn.classList.add('opacity-0', 'translate-y-20', 'pointer-events-none');
+                btn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            }
+        });
+
+        // ===== Mobile Menu =====
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            menu.classList.toggle('open');
+            if (menu.classList.contains('open')) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // ===== Lightbox =====
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightboxImg');
+            img.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ===== Back to Top =====
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== ESC Key =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // ===== GER Level Switcher (B1 / B2 / C1) =====
+        function setLevel(level) {
+            document.body.classList.add('level-switching');
+
+            document.querySelectorAll('[data-b1][data-b2][data-c1]').forEach(el => {
+                el.textContent = el.dataset[level];
+            });
+
+            // Update button styling
+            ['b1', 'b2', 'c1'].forEach(l => {
+                const btn = document.getElementById('btn-' + l);
+                if (l === level) {
+                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-rt-600 text-white shadow-md';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold transition bg-slate-100 text-slate-600 hover:bg-slate-200';
+                }
+            });
+
+            // Persist
+            localStorage.setItem('ruhrtech-lang-level', level);
+
+            setTimeout(() => {
+                document.body.classList.remove('level-switching');
+            }, 150);
+        }
+
+        // Load saved level on page load (default B2)
+        const savedLevel = localStorage.getItem('ruhrtech-lang-level') || 'b2';
+        setLevel(savedLevel);
+
+        // ===== Smooth Scroll for Nav Links =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Offset for sticky navbar
+                    setTimeout(() => {
+                        window.scrollBy(0, -80);
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
